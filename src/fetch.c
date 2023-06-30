@@ -26,7 +26,7 @@ struct dist info = {
 	.col8 = BWHITE "",
 	.getPkgCount = "echo unsupported",
 };
-char *username, *osname, *shellname, *pkgCount;
+char *osname, *shellname, *pkgCount;
 char *krnlver;
 long uptimeH, uptimeM;
 
@@ -87,18 +87,6 @@ void *uptime()
 	uptimeH = time.tv_sec / 3600;
 	uptimeM = (time.tv_sec / 60) - (time.tv_sec / 3600 * 60);
 #endif
-	return NULL;
-}
-
-void *user()
-{
-	username = getenv("USER");
-
-	/* I'm not sure if lower case usernames
-	   are allowed in UNIX-like operating
-	   systems. I'll have to look into it */
-	/* username = lowerCase(username); */
-
 	return NULL;
 }
 
@@ -167,7 +155,7 @@ void *os()
 			info.getPkgCount =
 				"grep 'P:' /lib/apk/db/installed | wc -l";
 		} else if (strncmp(osname, "Arch Linux", 10) == 0) {
-			info.col1 = BCYAN "";
+			info.col1 = BCYAN "\n";
 			info.col2 = BCYAN "      /\\      ";
 			info.col3 = BCYAN "     /  \\     ";
 			info.col4 = BCYAN "    /\\   \\    ";
@@ -175,7 +163,7 @@ void *os()
 			info.col6 = BCYAN "  /   ,,   \\  ";
 			info.col7 = BCYAN " /   |  |  -\\ ";
 			info.col8 = BCYAN "/_-''    ''-_\\\n";
-			info.getPkgCount = "pacman -Qq | wc -l";
+		    info.getPkgCount = "set -- ; for i in '/var/lib/pacman/local/[0-9a-z]*'; do set -- $i ; [ $# -gt 1 ] && pkgs=$# && break ; done ; echo $pkgs";
 		} else if (strncmp(osname, "Arch bang Linux", 15) ==
 				0) {
 			info.col1 = BCYAN "          ____\n";
@@ -186,9 +174,9 @@ void *os()
 			info.col6 = BCYAN "  /   __   \\  ";
 			info.col7 = BCYAN " /   /_/\\   \\ ";
 			info.col8 = BCYAN "/_-''    ''-_\\\n";
-			info.getPkgCount = "pacman -Qq | wc -l";
+		    info.getPkgCount = "set -- ; for i in '/var/lib/pacman/local/[0-9a-z]*'; do set -- $i ; [ $# -gt 1 ] && pkgs=$# && break ; done ; echo $pkgs";
 		} else if (strncmp(osname, "ArcoLinux", 9) == 0) {
-			info.col1 = BBLUE "";
+			info.col1 = BBLUE "\n";
 			info.col2 = BBLUE "      /\\      ";
 			info.col3 = BBLUE "     /  \\     ";
 			info.col4 = BBLUE "    / /\\ \\    ";
@@ -196,9 +184,9 @@ void *os()
 			info.col6 = BBLUE "  / /    \\ \\  ";
 			info.col7 = BBLUE " / / _____\\ \\ ";
 			info.col8 = BBLUE "/_/  `----.\\_\\\n";
-			info.getPkgCount = "pacman -Qq | wc -l";
+		    info.getPkgCount = "set -- ; for i in '/var/lib/pacman/local/[0-9a-z]*'; do set -- $i ; [ $# -gt 1 ] && pkgs=$# && break ; done ; echo $pkgs";
 		} else if (strncmp(osname, "Artix Linux", 11) == 0) {
-			info.col1 = BCYAN "";
+			info.col1 = BCYAN "\n";
 			info.col2 = BCYAN "      /\\      ";
 			info.col3 = BCYAN "     /  \\     ";
 			info.col4 = BCYAN "    /`'.,\\    ";
@@ -206,7 +194,7 @@ void *os()
 			info.col6 = BCYAN "  /      ,`\\  ";
 			info.col7 = BCYAN " /   ,.'`.  \\ ";
 			info.col8 = BCYAN "/.,'`     `'.\\\n";
-			info.getPkgCount = "pacman -Qq | wc -l";
+		    info.getPkgCount = "set -- ; for i in '/var/lib/pacman/local/[0-9a-z]*'; do set -- $i ; [ $# -gt 1 ] && pkgs=$# && break ; done ; echo $pkgs";
 		} else if (strncmp(osname, "CelOS", 5) == 0) {
 			info.col1 = BMAGENTA "\n";
 			info.col2 = BMAGENTA "     ______     ";
@@ -217,7 +205,7 @@ void *os()
 			info.col7 = BMAGENTA "  -_"BWHITE"  ______"BMAGENTA"/"BWHITE"_  "BMAGENTA;
 			info.col8 = BMAGENTA "    -______/    \n";
 			// have to add support for flatpak too
-			info.getPkgCount = "dpkg -l | tail -n+6 | wc -l";
+		    info.getPkgCount = "set -- ; for i in '/var/lib/dpkg/info/*.list'; do set -- $i ; [ $# -gt 1 ] && pkgs=$# && break ; done ; echo $pkgs";
 		/* TO DO: CREATE DEEPIN LOGO */
 		} else if (strncmp(osname, "Deepin", 6) == 0) {
 			info.col1 = BRED "\n";
@@ -228,7 +216,7 @@ void *os()
 			info.col6 = BRED "";
 			info.col7 = BRED "";
 			info.col8 = BRED "";
-			info.getPkgCount = "dpkg -l | tail -n+6 | wc -l";
+		    info.getPkgCount = "set -- ; for i in '/var/lib/dpkg/info/*.list'; do set -- $i ; [ $# -gt 1 ] && pkgs=$# && break ; done ; echo $pkgs";
 		} else if (strncmp(osname, "Debian GNU/Linux", 16) ==
 				0) {
 			info.col1 = BRED "  _____\n";
@@ -239,10 +227,9 @@ void *os()
 			info.col6 = BRED "  --_    ";
 			info.col7 = BRED "         ";
 			info.col8 = BRED "";
-			info.getPkgCount =
-				"dpkg -l | tail -n+6 | wc -l";
+		    info.getPkgCount = "set -- ; for i in '/var/lib/dpkg/info/*.list'; do set -- $i ; [ $# -gt 1 ] && pkgs=$# && break ; done ; echo $pkgs";
 		} else if (strncmp(osname, "Arch7", 10 ) == 0){
-			info.col1 = BCYAN "";
+			info.col1 = BCYAN "\n";
 			info.col2 = BCYAN " _______      ";
 			info.col3 = BCYAN "|____   \\     ";
 			info.col4 = BCYAN "    / /\\ \\    ";
@@ -250,9 +237,9 @@ void *os()
 			info.col6 = BCYAN "  / /____\\ \\  ";
 			info.col7 = BCYAN " /_/      \\_\\ ";
 			info.col8 = BCYAN "";
-			info.getPkgCount = "pacman -Qq | wc -l";
+		    info.getPkgCount = "set -- ; for i in '/var/lib/pacman/local/[0-9a-z]*'; do set -- $i ; [ $# -gt 1 ] && pkgs=$# && break ; done ; echo $pkgs";
 		} else if (strncmp(osname, "elementary OS", 12) == 0) {
-			info.col1 = BCYAN "";
+			info.col1 = BCYAN "\n";
 			info.col2 = BCYAN "  _______  ";
 			info.col3 = BCYAN " / ____  \\ ";
 			info.col4 = BCYAN "/  |  /  /\\";
@@ -260,10 +247,9 @@ void *os()
 			info.col6 = BCYAN "\\   /__/  /";
 			info.col7 = BCYAN " \\_______/ ";
 			info.col8 = BCYAN "";
-			info.getPkgCount =
-				"dpkg -l | tail -n+6 | wc -l";
+		    info.getPkgCount = "set -- ; for i in '/var/lib/dpkg/info/*.list'; do set -- $i ; [ $# -gt 1 ] && pkgs=$# && break ; done ; echo $pkgs";
 		} else if (strncmp(osname, "EndeavourOS", 11) == 0) {
-			info.col1 = BCYAN "";
+			info.col1 = BCYAN "\n";
 			info.col2 =
 				BRED "      /" BBLUE "\\     " BCYAN;
 			info.col3 = BRED "    /" BBLUE "/  \\" BCYAN
@@ -276,7 +262,7 @@ void *os()
 						"__- " BCYAN;
 			info.col7 = BCYAN " /____--     " BCYAN;
 			info.col8 = BCYAN "";
-			info.getPkgCount = "pacman -Qq | wc -l";
+		    info.getPkgCount = "set -- ; for i in '/var/lib/pacman/local/[0-9a-z]*'; do set -- $i ; [ $# -gt 1 ] && pkgs=$# && break ; done ; echo $pkgs";
 		} else if (strncmp(osname, "Fedora", 6) == 0) {
 			info.col1 = BWHITE "      _____\n" BBLUE;
 			info.col2 = BWHITE "     /   __)" BBLUE "\\ ";
@@ -303,9 +289,9 @@ void *os()
 			info.col6 = BMAGENTA "  (     _-   ";
 			info.col7 = BMAGENTA "  \\____-     ";
 			info.col8 = BWHITE "\n";
-			info.getPkgCount = "qlist -IRv | wc -l";
+		    info.getPkgCount = "set -- ; for i in '/var/db/pkg/*/*'; do set -- $i ; [ $# -gt 1 ] && pkgs=$# && break ; done ; echo $pkgs";
 		} else if (strncmp(osname, "KDE neon", 8) == 0) {
-			info.col1 = BGREEN "";
+			info.col1 = BGREEN "\n";
 			info.col2 = BGREEN "            ";
 			info.col3 = BGREEN "     --- _  ";
 			info.col4 = BGREEN "  /  ---  \\ ";
@@ -313,8 +299,7 @@ void *os()
 			info.col6 = BGREEN "  \\  --- _/ ";
 			info.col7 = BGREEN "     ---    ";
 			info.col8 = BGREEN "";
-			info.getPkgCount =
-				"dpkg -l | tail -n+6 | wc -l";
+		    info.getPkgCount = "set -- ; for i in '/var/lib/dpkg/info/*.list'; do set -- $i ; [ $# -gt 1 ] && pkgs=$# && break ; done ; echo $pkgs";
 		} else if (strncmp(osname, "Linux Mint", 10) == 0) {
 			info.col1 = BGREEN "   _____________   \n";
 			info.col2 = BGREEN "  |_            \\  ";
@@ -324,7 +309,7 @@ void *os()
 			info.col6 = BGREEN "   |  \\_____/  |   ";
 			info.col7 = BGREEN "   \\___________/   ";
 			info.col8 = BGREEN "\n";
-			info.getPkgCount = "dpkg -l | tail -n+6 | wc -l";
+		    info.getPkgCount = "set -- ; for i in '/var/lib/dpkg/info/*.list'; do set -- $i ; [ $# -gt 1 ] && pkgs=$# && break ; done ; echo $pkgs";
 		} else if (strncmp(osname, "Manjaro", 7) == 0) {
 			info.col1 = BGREEN " ________  __ \n";
 			info.col2 = BGREEN "|       | |  |";
@@ -334,7 +319,7 @@ void *os()
 			info.col6 = BGREEN "|  | |  | |  |";
 			info.col7 = BGREEN "|  | |  | |  |";
 			info.col8 = BGREEN "|__| |__| |__|\n";
-			info.getPkgCount = "pacman -Qq | wc -l";
+		    info.getPkgCount = "set -- ; for i in '/var/lib/pacman/local/[0-9a-z]*'; do set -- $i ; [ $# -gt 1 ] && pkgs=$# && break ; done ; echo $pkgs";
 		} else if (strncmp(osname, "NixOS", 5) == 0) {
 			info.col1 = BMAGENTA "            \n";
 			info.col2 = BMAGENTA "  \\\\  \\\\ //     ";
@@ -360,7 +345,7 @@ void *os()
 			info.col8 = BGREEN "";
 			info.getPkgCount = "rpm -qa | wc -l";
 		} else if (strncmp(osname, "Parabola", 8) == 0) {
-			info.col1 = BMAGENTA "";
+			info.col1 = BMAGENTA "\n";
 			info.col2 = BMAGENTA "  __ __ __  _  ";
 			info.col3 = BMAGENTA ".`_//_//_/ / `.";
 			info.col4 = BMAGENTA "          /  .`";
@@ -368,7 +353,7 @@ void *os()
 			info.col6 = BMAGENTA "        /.`    ";
 			info.col7 = BMAGENTA "       /`      ";
 			info.col8 = BMAGENTA "";
-			info.getPkgCount = "pacman -Qq | wc -l";
+		    info.getPkgCount = "set -- ; for i in '/var/lib/pacman/local/[0-9a-z]*'; do set -- $i ; [ $# -gt 1 ] && pkgs=$# && break ; done ; echo $pkgs";
 		} else if (strncmp(osname, "Pop!_OS", 7) == 0) {
 			info.col1 = BCYAN "______\n";
 			info.col2 = BCYAN "\\   _ \\        __";
@@ -378,8 +363,7 @@ void *os()
 			info.col6 = BCYAN "    \\ \\    _     ";
 			info.col7 = BCYAN "   __\\_\\__(_)_   ";
 			info.col8 = BCYAN "  (___________)";
-			info.getPkgCount =
-				"dpkg -l | tail -n+6 | wc -l";
+		    info.getPkgCount = "set -- ; for i in '/var/lib/dpkg/info/*.list'; do set -- $i ; [ $# -gt 1 ] && pkgs=$# && break ; done ; echo $pkgs";
 		} else if (strncmp(osname, "postmarketOS", 13) == 0) {
 			info.col1 = BGREEN "       /\\       \n";
 			info.col2 = BGREEN "      /  \\      ";
@@ -414,7 +398,7 @@ void *os()
 			info.getPkgCount =
 				"ls /var/lib/eopkg/package/ | wc -l";
 		} else if (strncmp(osname, "Ubuntu", 6) == 0) {
-			info.col1 = BRED "";
+			info.col1 = BRED "\n";
 			info.col2 = BRED "         _  ";
 			info.col3 = BRED "     ---(_) ";
 			info.col4 = BRED " _/  ---  \\ ";
@@ -422,8 +406,7 @@ void *os()
 			info.col6 = BRED "  \\  --- _/ ";
 			info.col7 = BRED "     ---(_) ";
 			info.col8 = BRED "";
-			info.getPkgCount =
-				"dpkg -l | tail -n+6 | wc -l";
+		    info.getPkgCount = "set -- ; for i in '/var/lib/dpkg/info/*.list'; do set -- $i ; [ $# -gt 1 ] && pkgs=$# && break ; done ; echo $pkgs";
 		} else if (strncmp(osname, "void", 4) == 0) {
 			info.col1 = BGREEN "      _____\n";
 			info.col2 = BGREEN "   _  \\____ -  ";
@@ -433,7 +416,7 @@ void *os()
 			info.col6 = BGREEN " \\ \\ \\____/ / /";
 			info.col7 = BGREEN "  \\ \\____  /_/ ";
 			info.col8 = BGREEN "   -_____\\\n";
-			info.getPkgCount = "xbps-query -l | wc -l";
+		    info.getPkgCount = "set -- ; for i in '/var/db/xbps/.*'; do set -- $i ; [ $# -gt 1 ] && pkgs=$# && break ; done ; echo $pkgs";
 		} else if (strncmp(osname, "Zorin OS", 8) == 0) {
 			info.col1 = BBLUE "   ______   \n";
 			info.col2 = BBLUE "  /______\\  ";
@@ -443,10 +426,10 @@ void *os()
 			info.col6 = BBLUE " \\   /___ / ";
 			info.col7 = BBLUE "  \\______/  ";
 			info.col8 = BBLUE "";
-			info.getPkgCount = "dpkg -l | tail -n+6 | wc -l";
+		    info.getPkgCount = "set -- ; for i in '/var/lib/dpkg/info/*.list'; do set -- $i ; [ $# -gt 1 ] && pkgs=$# && break ; done ; echo $pkgs";
 		}
 	} else if (strncmp(sysInfo.sysname, "Darwin", 6) == 0) {
-		info.col1 = "" BYELLOW;
+		info.col1 = "\n" BYELLOW;
 		info.col2 = BGREEN "          .:'   " BYELLOW;
 		info.col3 = BGREEN "      __ :'__   " BYELLOW;
 		info.col4 = BYELLOW "   .'`__`-'__``." BYELLOW;
@@ -480,7 +463,7 @@ void *os()
 			free(macVer);
 		}
 	} else if (strncmp(sysInfo.sysname, "FreeBSD", 7) == 0) {
-		info.col1 = BRED "";
+		info.col1 = BRED "\n";
 		info.col2 = BRED "/\\,-'''''-,/\\";
 		info.col3 = BRED "\\_)       (_/";
 		info.col4 = BRED "|           |";
@@ -499,6 +482,7 @@ void *os()
 		info.col6 = BYELLOW " / \\         / ";
 		info.col7 = BYELLOW "    /-_____-\\  ";
 		info.col8 = BYELLOW "";
+		info.getPkgCount = "set -- /var/db/pkg/* && pkgs=$# ; echo $pkgs";
 		info.getPkgCount =
 		    "/bin/ls -1 /var/db/pkg/ | wc -l | tr -d ' '";
 		osname = sysInfo.sysname;
@@ -519,10 +503,6 @@ void *colourDraw()
 	if (PrintColours == false)
 		return NULL;
 
-	printf("    ");
-	for (int i = 30; i < 38; i++) {
-		printf("\033[0;%dm %s", i, ColourCharacter);
-	} // print regular term colours
 	printf("\n    ");
 	for (int i = 30; i < 38; i++) {
 		printf("\033[1;%dm %s", i, ColourCharacter);
@@ -538,27 +518,24 @@ int main()
 	uname(&sysInfo);
 	pthread_t threads[6];
 
-	pthread_create(&threads[0], NULL, user, NULL);
-	pthread_create(&threads[1], NULL, os, NULL);
-	pthread_create(&threads[2], NULL, kernel, NULL);
-	pthread_create(&threads[3], NULL, uptime, NULL);
-	pthread_create(&threads[4], NULL, shell, NULL);
+	pthread_create(&threads[0], NULL, os, NULL);
+	pthread_create(&threads[1], NULL, kernel, NULL);
+	pthread_create(&threads[2], NULL, uptime, NULL);
+	pthread_create(&threads[3], NULL, shell, NULL);
 
 	pthread_join(threads[0], NULL);
 	/* os function must be run to get info.col1 */
 	pthread_join(threads[1], NULL);
-	printf("%s", info.col1);
-	printf("%s    %s%s%s\n", info.col2, UserText, TextColour, username);
-	printf("%s    %s%s%s\n", info.col3, OsText, TextColour, osname);
+	printf("  %s", info.col1);
+	printf("  %s\n", info.col2);
+	printf("  %s %s%s%s\n", info.col3, OsText, TextColour, osname);
 	pthread_join(threads[2], NULL);
-	printf("%s    %s%s%s\n", info.col4, KernelText, TextColour, krnlver);
+	printf("  %s %s%s%s\n", info.col4, KernelText, TextColour, krnlver);
+	printf("  %s %s%s%ldh %ldm\n", info.col5, UptimeText, TextColour, uptimeH, uptimeM);
 	pthread_join(threads[3], NULL);
-	printf("%s    %s%s%ldh %ldm\n", info.col5, UptimeText, TextColour, uptimeH,
-	       uptimeM);
-	pthread_join(threads[4], NULL);
-	printf("%s    %s%s%s\n", info.col6, ShellText, TextColour, shellname);
-	printf("%s    %s%s%s\n", info.col7, PackageText, TextColour, pkgCount);
-	printf("%s\n", info.col8);
+	printf("  %s %s%s%s\n", info.col6, ShellText, TextColour, shellname);
+	printf("  %s %s%s%s\n", info.col7, PackageText, TextColour, pkgCount);
+	printf("  %s", info.col8);
 
 	pthread_create(&threads[5], NULL, colourDraw, NULL);
 	pthread_join(threads[5], NULL);
